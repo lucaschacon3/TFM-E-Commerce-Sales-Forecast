@@ -13,7 +13,7 @@ El objetivo principal es optimizar la toma de decisiones mediante:
 1.  **Previsión de Ventas:** Modelado predictivo de la demanda futura.
 2.  **Segmentación de Clientes:** Identificación de perfiles de consumo para estrategias de marketing personalizadas.
 
-**Dataset:** [Kaggle E-Commerce Sales Forecast](https://www.kaggle.com/)
+**Dataset:** [Kaggle E-Commerce Sales Forecast](https://www.kaggle.com/code/allunia/e-commerce-sales-forecast)
 
 ---
 
