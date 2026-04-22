@@ -1,7 +1,3 @@
-Aquí tienes una propuesta de `README.md` profesional, estructurada y orientada a resultados, ideal para un TFM o un portfolio de GitHub.
-
----
-
 # E-Commerce Sales Forecast: Análisis Predictivo y Segmentación de Clientes
 
 Este proyecto aplica técnicas avanzadas de **Data Science** para transformar datos transaccionales de comercio electrónico en inteligencia de negocio. El flujo de trabajo abarca desde la limpieza técnica de datos hasta la implementación de modelos de aprendizaje supervisado (Regresión) y no supervisado (Clustering).
