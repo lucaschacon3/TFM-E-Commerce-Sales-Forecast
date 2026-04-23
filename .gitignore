@@ -9,13 +9,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Datos (Dataset de Kaggle y archivos pesados)
-*.csv
-*.json
-*.xlsx
-data/
-outputs/
-
 # Jupyter Notebooks
 .ipynb_checkpoints
 
