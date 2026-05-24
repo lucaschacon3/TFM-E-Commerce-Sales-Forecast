@@ -1,70 +1,94 @@
 # E-Commerce Sales Forecast: Análisis Predictivo y Segmentación de Clientes
 
-Este proyecto aplica técnicas avanzadas de **Data Science** para transformar datos transaccionales de comercio electrónico en inteligencia de negocio. El flujo de trabajo abarca desde la limpieza técnica de datos hasta la implementación de modelos de aprendizaje supervisado (Regresión) y no supervisado (Clustering).
-
-
-
-## 📋 Resumen del Proyecto
-El objetivo principal es optimizar la toma de decisiones mediante:
-1.  **Previsión de Ventas:** Modelado predictivo de la demanda futura.
-2.  **Segmentación de Clientes:** Identificación de perfiles de consumo para estrategias de marketing personalizadas.
-
-**Dataset:** [Kaggle E-Commerce Sales Forecast](https://www.kaggle.com/code/allunia/e-commerce-sales-forecast)
+Pipeline de Data Science aplicado al dataset transaccional de Kaggle "E-Commerce Sales Forecast" (UK retailer, 2010-2011). El flujo cubre limpieza de datos, predicción de ventas diarias con modelos de regresión y segmentación de clientes mediante clustering.
 
 ---
 
-## 📂 Estructura del Proyecto
+## Dataset
 
-El desarrollo se divide en tres fases críticas, cada una documentada en su respectivo notebook:
+**Origen:** [Kaggle E-Commerce Sales Forecast](https://www.kaggle.com/datasets/chirag19/online-sales)
 
-### 01. Preprocesado de Datos
-* **Limpieza:** Tratamiento de valores nulos, duplicados y corrección de tipos de datos.
-* **Análisis Exploratorio (EDA):** Identificación de valores atípicos (outliers) y distribuciones mediante `ydata-profiling`.
-* **Feature Engineering:** Creación de variables temporales y métricas de comportamiento de compra.
-
-### 02. Regresión: Predicción de Ventas
-* **Búsqueda de Modelos:** Evaluación de algoritmos (Random Forest, XGBoost, lightgbm).
-* **Validación:** Implementación de técnicas de validación cruzada y ajuste de hiperparámetros.
-* **Selección:** Elección del modelo óptimo basado en métricas de error (RMSE, MAE).
-
-### 03. Clustering: Segmentación de Clientes
-* **Modelado:** Aplicación de algoritmos de agrupamiento (K-Means, DBSCAN o Jerárquico).
-* **Análisis de Perfiles:** Interpretación de los clusters para definir segmentos de clientes (ej. clientes VIP, clientes en riesgo, nuevos clientes).
-* **Validación:** Uso del Método del Codo (Elbow Method) y Coeficiente de Silueta.
+- **Transacciones originales:** 541,909
+- **Transacciones tras limpieza:** 392,693
+- **Periodo:** Dic 2010 – Dic 2011
+- **Clientes únicos:** 4,338
 
 ---
 
-## 🛠️ Stack Tecnológico
-* **Lenguaje:** Python 3.12
-* **Entorno:** Jupyter Notebook / VS Code (`.venv`)
-* **Librerías Principales:**
-    * **Análisis:** `pandas`, `numpy`
-    * **Visualización:** `matplotlib`, `seaborn`, `ydata-profiling`
-    * **Machine Learning:** `scikit-learn`, `xgboost`
+## Pipeline
+
+### 1. 01.preprocesado_datos
+Limpieza: eliminación de filas sin `CustomerID`, cancelaciones (cantidades negativas), y creación de variables derivadas (`TotalVenta`, `Fecha`, `Mes`, `DiaSemana`). Se genera `dataset_limpio.csv`.
+
+### 2. 02.regresion_prediccion_ventas
+Predicción de ventas diarias con ventana deslizante de 7 días:
+
+- **Features:** `lag_1`, `lag_7`, `media_7` + one-hot encoding del día de la semana
+- **División temporal:** Train (hasta Sep 2011) / Val (Oct 2011) / Test (Nov-Dic 2011)
+- **Modelos:** RandomForest, XGBoost, LightGBM (parámetros por defecto)
+- **LightGBM** seleccionado como mejor modelo
+
+#### Métricas en validación (Oct 2011)
+
+| Modelo | MAE | RMSE |
+|---|---|---|
+| RandomForest | 12,016 | 15,474 |
+| XGBoost | 13,875 | 18,734 |
+| **LightGBM** | **11,079** | **15,397** |
+
+### 3. 03.segmentacion_clientes
+Segmentación basada en comportamiento de compra:
+
+- **Variables por cliente:** TotalGastado, NumCompras, ProductosDistintos, TicketMedio
+- **Outliers:** Isolation Forest (5% de contaminación → 217 eliminados)
+- **Escalado:** RobustScaler
+- **Reducción:** PCA (1 componente, 62.63% varianza explicada)
+- **Clustering:** K-Means (k=3 según método del codo)
+- **Silhouette Score:** 0.6184
+
+#### Perfiles de cliente
+
+| Segmento | Clientes | Gasto medio | Compras | Productos |
+|---|---|---|---|---|
+| VIP / Premium | 402 | ~4,179 € | ~10 | ~145 |
+| Recurrentes | 1,132 | ~1,624 € | ~4.6 | ~80 |
+| Ocasionales | 2,587 | ~408 € | ~1.7 | ~26 |
 
 ---
 
-## 🚀 Instalación y Uso
+## Stack Tecnológico
 
-1.  **Clonar el repositorio:**
-    ```bash
-    git clone https://github.com/tu-usuario/TFM-E-Commerce-Sales-Forecast.git
-    cd TFM-E-Commerce-Sales-Forecast
-    ```
-
-2.  **Configurar el entorno virtual:**
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate  # Linux/macOS
-    # o
-    .\.venv\Scripts\activate  # Windows
-    ```
-
-3.  **Ejecución:**
-    Sigue el orden numérico de los notebooks en la carpeta raíz para replicar el experimento completo.
+- **Lenguaje:** Python 3.12
+- **Entorno:** Jupyter Notebook / VS Code
+- **Librerías:** pandas, numpy, scikit-learn, xgboost, lightgbm, matplotlib, seaborn, ydata-profiling
 
 ---
 
-## 📈 Resultados y Conclusiones
-* **Regresión:** El modelo seleccionado permite predecir las ventas con un error inferior al [X]%, facilitando la gestión de inventarios.
-* **Clustering:** Se identificaron [X] grupos diferenciados, permitiendo una segmentación accionable para campañas de retención.
+## Instalación y Uso
+
+```bash
+git clone https://github.com/tu-usuario/TFM-E-Commerce-Sales-Forecast.git
+cd TFM-E-Commerce-Sales-Forecast
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Ejecutar los notebooks en orden numérico: `01` → `02` → `03`.
+
+---
+
+## Power BI
+
+Dos dashboards para visualización de resultados:
+
+- **Dashboard de Regresión**: Comparativa de ventas reales vs predicciones, evolución temporal y errores por modelo.
+- **Dashboard de Segmentación**: Distribución de clientes por clúster, perfiles de gasto/frecuencia y análisis por segmento (VIP, Recurrente, Ocasional).
+
+---
+
+## Salidas Generadas
+
+- `dataset_limpio.csv` — datos preprocesados
+- `ventas_{Modelo}.csv` — predicciones diarias por modelo (Nov-Dic 2011)
+- `clientes_con_cluster.csv` — clientes con segmento asignado
