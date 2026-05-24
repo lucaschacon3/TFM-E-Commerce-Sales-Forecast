@@ -17,10 +17,10 @@ Pipeline de Data Science aplicado al dataset transaccional de Kaggle "E-Commerce
 
 ## Pipeline
 
-### 1. 01.preprocesado_datos
+### 01.preprocesado_datos
 Limpieza: eliminación de filas sin `CustomerID`, cancelaciones (cantidades negativas), y creación de variables derivadas (`TotalVenta`, `Fecha`, `Mes`, `DiaSemana`). Se genera `dataset_limpio.csv`.
 
-### 2. 02.regresion_prediccion_ventas
+### 02.regresion_prediccion_ventas
 Predicción de ventas diarias con ventana deslizante de 7 días:
 
 - **Features:** `lag_1`, `lag_7`, `media_7` + one-hot encoding del día de la semana
@@ -36,7 +36,7 @@ Predicción de ventas diarias con ventana deslizante de 7 días:
 | XGBoost | 13,875 | 18,734 |
 | **LightGBM** | **11,079** | **15,397** |
 
-### 3. 03.segmentacion_clientes
+### 03.segmentacion_clientes
 Segmentación basada en comportamiento de compra:
 
 - **Variables por cliente:** TotalGastado, NumCompras, ProductosDistintos, TicketMedio
@@ -67,7 +67,7 @@ Segmentación basada en comportamiento de compra:
 ## Instalación y Uso
 
 ```bash
-git clone https://github.com/tu-usuario/TFM-E-Commerce-Sales-Forecast.git
+git clone https://github.com/lucaschacon3/TFM-E-Commerce-Sales-Forecast.git
 cd TFM-E-Commerce-Sales-Forecast
 python -m venv .venv
 source .venv/bin/activate
